@@ -52,6 +52,7 @@ app.get('/products',async(req,res)=>{
 //post order
 app.post('/placeOrder',async(req,res)=>{
     const orders = req.body;
+  
     const result = await orderCollection.insertOne(orders);
     res.send(result);
 })
@@ -117,9 +118,24 @@ app.get('/allOrders',async(req,res)=>{
   //delete Order from ui
   app.delete("/deleteOrder/:id", async (req, res) => {
     const id = req.params.id;
+    
     const result = await orderCollection.deleteOne({
       _id: ObjectId(id),
     });
+   
+    res.send(result);
+    
+  });
+
+  //update shipped
+  app.put("/update/:id", async (req, res) => {
+    const id = req.params.id;
+    
+    const updateDoc={$set:{stetus:'Shipped'}}
+    const result = await orderCollection.updateOne({
+      _id: ObjectId(id)
+    } ,updateDoc );
+  
     res.send(result);
     
   });
